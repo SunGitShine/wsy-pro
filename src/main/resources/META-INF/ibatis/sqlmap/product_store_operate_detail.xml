@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProductStoreOperateDetailMysqlDAO">
+
+  <resultMap id="ProductStoreOperateDetailDO" type="com.sztx.wsy.dataaccess.domain.ProductStoreOperateDetailDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_store_operate_id" jdbcType="INTEGER" property="productStoreOperateId" />
+    <result column="shoe_code" jdbcType="INTEGER" property="shoeCode" />
+    <result column="shoe_num" jdbcType="INTEGER" property="shoeNum" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, product_store_operate_id, shoe_code, shoe_num
+  </sql>
+
+  <select id="findByProductStoreOperateId" parameterType="java.lang.Integer" resultMap="ProductStoreOperateDetailDO">
+    select 
+    <include refid="column_List" />
+    from product_store_operate_detail
+    where product_store_operate_id = #{productStoreOperateId,jdbcType=INTEGER}
+  </select>
+
+  <!-- <delete id="delete">
+    delete from product_store_operate_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete> -->
+
+  <insert id="batchAdd" parameterType="com.sztx.wsy.dataaccess.domain.ProductStoreOperateDetailDO">
+    insert into product_store_operate_detail (product_store_operate_id, shoe_code, shoe_num)
+    values
+      <foreach collection="productStoreOperateDetailList" item="item" index="index" separator=",">
+           (#{item.productStoreOperateId},#{item.shoeCode},#{item.shoeNum})
+       </foreach>
+  </insert>
+
+  <!-- <select id="listCount" resultType="java.lang.Integer">
+    select count(*) from product_store_operate_detail
+     where 1=1 
+    <if test="productStoreOperateDetailDO.productStoreOperateId != null and productStoreOperateDetailDO.productStoreOperateId != '' ">
+       and product_store_operate_id = #{productStoreOperateDetailDO.productStoreOperateId,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreOperateDetailDO.shoeCode != null and productStoreOperateDetailDO.shoeCode != '' ">
+       and shoe_code = #{productStoreOperateDetailDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreOperateDetailDO.shoeNum != null and productStoreOperateDetailDO.shoeNum != '' ">
+       and shoe_num = #{productStoreOperateDetailDO.shoeNum,jdbcType=INTEGER}
+    </if>
+
+  </select>
+
+  <select id="listPage" resultMap="ProductStoreOperateDetailDO">
+  select
+    <include refid="column_List" />
+    from product_store_operate_detail where 1=1 
+    <if test="productStoreOperateDetailDO.productStoreOperateId != null and productStoreOperateDetailDO.productStoreOperateId != '' ">
+       and product_store_operate_id = #{productStoreOperateDetailDO.productStoreOperateId,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreOperateDetailDO.shoeCode != null and productStoreOperateDetailDO.shoeCode != '' ">
+       and shoe_code = #{productStoreOperateDetailDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreOperateDetailDO.shoeNum != null and productStoreOperateDetailDO.shoeNum != '' ">
+       and shoe_num = #{productStoreOperateDetailDO.shoeNum,jdbcType=INTEGER}
+    </if>
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select> -->
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.EmployeeMysqlDAO">
+  <resultMap id="EmployeeDO" type="com.sztx.wsy.dataaccess.domain.EmployeeDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="entry_time" jdbcType="TIMESTAMP" property="entryTime" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, department_id, department_name, employee_no, name, mobile, entry_time
+  </sql>
+
+  <select id="findById" parameterType="java.lang.Integer" resultMap="EmployeeDO">
+    select 
+    <include refid="column_List" />
+    from employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findByNo" parameterType="java.lang.String" resultMap="EmployeeDO">
+    select 
+    <include refid="column_List" />
+    from employee
+    where employee_no = #{employeeNo,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete">
+    delete from employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.EmployeeDO">
+    insert into employee (department_id, department_name, 
+      employee_no, name, mobile, 
+      entry_time)
+    values (#{departmentId,jdbcType=INTEGER}, #{departmentName,jdbcType=VARCHAR}, 
+      #{employeeNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{entryTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.EmployeeDO">
+  	update employee
+  	<set>
+  		<if test="departmentId != null">department_id = #{departmentId,jdbcType=INTEGER},</if>
+  		<if test="departmentName != null and departmentName != ''">department_name = #{departmentName,jdbcType=VARCHAR},</if>
+  		<if test="employeeNo != null and employeeNo != ''">employee_no = #{employeeNo,jdbcType=VARCHAR},</if>
+  		<if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+  		<if test="mobile != null and mobile != ''">mobile = #{mobile,jdbcType=VARCHAR},</if>
+  		<if test="entryTime != null and entryTime != ''">entry_time = #{entryTime,jdbcType=TIMESTAMP}</if>
+  	</set>
+  	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="totalCount" resultType="java.lang.Integer">
+    select count(*) from employee
+     where 1=1 
+    <if test="employeeDO.departmentId != null and employeeDO.departmentId != '' ">
+       and department_id = #{employeeDO.departmentId,jdbcType=INTEGER}
+    </if>
+
+    <if test="employeeDO.name != null and employeeDO.name != '' ">
+       and name LIKE CONCAT('%',#{employeeDO.name},'%')
+    </if>
+
+  </select>
+
+  <select id="findByPage" resultMap="EmployeeDO">
+  select
+    <include refid="column_List" />
+    from employee where 1=1 
+    <if test="employeeDO.departmentId != null and employeeDO.departmentId != '' ">
+       and department_id = #{employeeDO.departmentId,jdbcType=INTEGER}
+    </if>
+
+    <if test="employeeDO.name != null and employeeDO.name != '' ">
+       and name LIKE CONCAT('%',#{employeeDO.name},'%')
+    </if>
+	order by department_id
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+
+</mapper>

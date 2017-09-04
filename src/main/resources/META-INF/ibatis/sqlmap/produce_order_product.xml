@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProduceOrderProductMysqlDAO">
+
+  <resultMap id="ProduceOrderProductDO" type="com.sztx.wsy.dataaccess.domain.ProduceOrderProductDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="produce_price" jdbcType="INTEGER" property="producePrice" />
+    <result column="produce_amount" jdbcType="INTEGER" property="produceAmount" />
+    <result column="produce_num" jdbcType="INTEGER" property="produceNum" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_url" jdbcType="VARCHAR" property="productUrl" />
+    <result column="produce_ask" jdbcType="LONGVARCHAR" property="produceAsk" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, order_no, produce_price, produce_amount, produce_num, product_name, product_url,produce_ask, remark
+  </sql>
+
+  <select id="findByOrderNo" parameterType="java.lang.String" resultMap="ProduceOrderProductDO">
+    select 
+    <include refid="column_List" />
+    from produce_order_product
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete">
+    delete from produce_order_product
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderProductDO">
+    insert into produce_order_product (order_no, product_name, produce_price, produce_amount, produce_num, product_url, produce_ask, remark)
+    values (#{orderNo,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{producePrice,jdbcType=INTEGER}, #{produceAmount,jdbcType=INTEGER}, #{produceNum,jdbcType=INTEGER},
+      #{productUrl,jdbcType=VARCHAR}, #{produceAsk,jdbcType=LONGVARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+      	<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+  </insert>
+
+  <!-- <select id="listCount" resultType="java.lang.Integer">
+    select count(*) from produce_order_product
+     where 1=1 
+    <if test="produceOrderProductDO.orderNo != null and produceOrderProductDO.orderNo != '' ">
+       and order_no = #{produceOrderProductDO.orderNo,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDO.productName != null and produceOrderProductDO.productName != '' ">
+       and product_name = #{produceOrderProductDO.productName,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.productUrl != null and produceOrderProductDO.productUrl != '' ">
+       and product_url = #{produceOrderProductDO.productUrl,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.produceAsk != null and produceOrderProductDO.produceAsk != '' ">
+       and produce_ask = #{produceOrderProductDO.produceAsk,jdbcType=LONGVARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.remark != null and produceOrderProductDO.remark != '' ">
+       and remark = #{produceOrderProductDO.remark,jdbcType=LONGVARCHAR}
+    </if>
+
+  </select>
+
+  <select id="listPage" resultMap="ProduceOrderProductDO">
+  select
+    <include refid="column_List" />
+    from produce_order_product where 1=1 
+    <if test="produceOrderProductDO.orderNo != null and produceOrderProductDO.orderNo != '' ">
+       and order_no = #{produceOrderProductDO.orderNo,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDO.productName != null and produceOrderProductDO.productName != '' ">
+       and product_name = #{produceOrderProductDO.productName,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.productUrl != null and produceOrderProductDO.productUrl != '' ">
+       and product_url = #{produceOrderProductDO.productUrl,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.produceAsk != null and produceOrderProductDO.produceAsk != '' ">
+       and produce_ask = #{produceOrderProductDO.produceAsk,jdbcType=LONGVARCHAR}
+    </if>
+
+    <if test="produceOrderProductDO.remark != null and produceOrderProductDO.remark != '' ">
+       and remark = #{produceOrderProductDO.remark,jdbcType=LONGVARCHAR}
+    </if>
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select> -->
+
+</mapper>

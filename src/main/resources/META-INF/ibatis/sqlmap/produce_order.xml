@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProduceOrderMysqlDAO">
+
+  <resultMap id="ProduceOrderDO" type="com.sztx.wsy.dataaccess.domain.ProduceOrderDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="is_urgent" jdbcType="INTEGER" property="isUrgent" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="order_amount" jdbcType="INTEGER" property="orderAmount" />
+    <result column="vamp_status" jdbcType="INTEGER" property="vampStatus" />
+    <result column="sole_status" jdbcType="INTEGER" property="soleStatus" />
+    <result column="qc_status" jdbcType="INTEGER" property="qcStatus" />
+    <result column="tailor_status" jdbcType="INTEGER" property="tailorStatus" />
+    <result column="tailor_finish_time" jdbcType="TIMESTAMP" property="tailorFinishTime" />
+    <result column="tailor_finish_user" jdbcType="VARCHAR" property="tailorFinishUser" />
+    <result column="vamp_handle_time" jdbcType="TIMESTAMP" property="vampHandleTime" />
+    <result column="vamp_handle_user" jdbcType="VARCHAR" property="vampHandleUser" />
+    <result column="vamp_finish_time" jdbcType="TIMESTAMP" property="vampFinishTime" />
+    <result column="vamp_finish_user" jdbcType="VARCHAR" property="vampFinishUser" />
+    <result column="sole_handle_time" jdbcType="TIMESTAMP" property="soleHandleTime" />
+    <result column="sole_handle_user" jdbcType="VARCHAR" property="soleHandleUser" />
+    <result column="sole_finish_time" jdbcType="TIMESTAMP" property="soleFinishTime" />
+    <result column="sole_finish_user" jdbcType="VARCHAR" property="soleFinishUser" />
+    <result column="qc_finish_time" jdbcType="TIMESTAMP" property="qcFinishTime" />
+    <result column="qc_finish_user" jdbcType="VARCHAR" property="qcFinishUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, order_no, order_name, is_urgent, delivery_time, order_num, order_amount, vamp_status, sole_status, 
+    qc_status, tailor_status, tailor_finish_time, tailor_finish_user, vamp_handle_time, 
+    vamp_handle_user, vamp_finish_time, vamp_finish_user, 
+    sole_handle_time, sole_handle_user, sole_finish_time, sole_finish_user, qc_finish_time, 
+    qc_finish_user, create_time, create_user, update_time, update_user
+  </sql>
+
+  <select id="findByOrderNo" parameterType="java.lang.String" resultMap="ProduceOrderDO">
+    select 
+    <include refid="column_List" />
+    from produce_order
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete">
+    delete from produce_order
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderDO">
+    insert into produce_order (order_no, order_name, 
+      is_urgent, delivery_time, order_num, order_amount, create_time, create_user, 
+      update_time, update_user)
+    values (#{orderNo,jdbcType=VARCHAR}, #{orderName,jdbcType=VARCHAR}, 
+      #{isUrgent,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=INTEGER}, 
+      #{orderAmount,jdbcType=DECIMAL}, now(), #{createUser,jdbcType=VARCHAR}, 
+      now(), #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderDO">
+  	update produce_order
+  	<set>
+  		<if test="orderName != null and orderName != ''">order_name = #{orderName},</if>
+  		<if test="deliveryTime != null and deliveryTime != ''">delivery_time = #{deliveryTime},</if>
+  		<if test="isUrgent != null">is_urgent = #{isUrgent},</if>
+  		<if test="orderAmount != null">order_amount = #{orderAmount},</if>
+  		<if test="tailorStatus != null">tailor_status = #{tailorStatus},</if>
+  		<if test="vampStatus != null">vamp_status = #{vampStatus},</if>
+  		<if test="soleStatus != null">sole_status = #{soleStatus},</if>
+  		<if test="qcStatus != null">qc_status = #{qcStatus},</if>
+  		<if test="tailorFinishTime != null and tailorFinishTime != ''">tailor_finish_time = #{tailorFinishTime},</if>
+  		<if test="tailorFinishUser != null and tailorFinishUser != ''">tailor_finish_user = #{tailorFinishUser},</if>
+  		<if test="vampHandleTime != null and vampHandleTime != ''">vamp_handle_time = #{vampHandleTime},</if>
+  		<if test="vampHandleUser != null and vampHandleUser != ''">vamp_handle_user = #{vampHandleUser},</if>
+  		<if test="vampFinishTime != null and vampFinishTime != ''">vamp_finish_time = #{vampFinishTime},</if>
+  		<if test="vampFinishUser != null and vampFinishUser != ''">vamp_finish_user = #{vampFinishUser},</if>
+  		<if test="soleHandleTime != null and soleHandleTime != ''">sole_handle_time = #{soleHandleTime},</if>
+  		<if test="soleHandleUser != null and soleHandleUser != ''">sole_handle_user = #{soleHandleUser},</if>
+  		<if test="soleFinishTime != null and soleFinishTime != ''">sole_finish_time = #{soleFinishTime},</if>
+  		<if test="soleFinishUser != null and soleFinishUser != ''">sole_finish_user = #{soleFinishUser},</if>
+  		<if test="qcFinishTime != null and qcFinishTime != ''">qc_finish_time = #{qcFinishTime},</if>
+  		<if test="qcFinishUser != null and qcFinishUser != ''">qc_finish_user = #{qcFinishUser},</if>
+  		update_user = #{updateUser},
+  		update_time = now()
+  	</set>
+  	where order_no = #{orderNo}
+  </update>
+
+  <select id="orderTotalCount" resultType="java.lang.Integer" parameterType="com.sztx.wsy.core.service.domain.request.ProduceOrderListReq">
+    select count(*) from produce_order
+     where qc_status = 0
+    <if test="produceOrderListReq.orderNo != null and produceOrderListReq.orderNo != '' ">
+       and order_no = #{produceOrderListReq.orderNo,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderListReq.orderName != null and produceOrderListReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{produceOrderListReq.orderName,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="produceOrderListReq.isUrgent != null ">
+       and is_urgent = #{produceOrderListReq.isUrgent,jdbcType=INTEGER}
+    </if>
+    
+    <if test="produceOrderListReq.tailorStatus != null ">
+       and tailor_status = #{produceOrderListReq.tailorStatus,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.vampStatus != null ">
+       and vamp_status = #{produceOrderListReq.vampStatus,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.soleStatus != null ">
+       and sole_status = #{produceOrderListReq.soleStatus,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.qcStatus != null ">
+       and qc_status = #{produceOrderListReq.qcStatus,jdbcType=INTEGER}
+    </if>
+
+  </select>
+
+  <select id="findOrderList" resultMap="ProduceOrderDO" parameterType="com.sztx.wsy.core.service.domain.request.ProduceOrderListReq">
+  select
+    <include refid="column_List" />
+    from produce_order where qc_status = 0
+    <if test="produceOrderListReq.orderNo != null and produceOrderListReq.orderNo != '' ">
+       and order_no = #{produceOrderListReq.orderNo,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderListReq.orderName != null and produceOrderListReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{produceOrderListReq.orderName,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="produceOrderListReq.isUrgent != null ">
+       and is_urgent = #{produceOrderListReq.isUrgent,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.tailorStatus != null ">
+       and tailor_status = #{produceOrderListReq.tailorStatus,jdbcType=INTEGER}
+    </if>
+    
+    <if test="produceOrderListReq.vampStatus != null ">
+       and vamp_status = #{produceOrderListReq.vampStatus,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.soleStatus != null ">
+       and sole_status = #{produceOrderListReq.soleStatus,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderListReq.qcStatus != null ">
+       and qc_status = #{produceOrderListReq.qcStatus,jdbcType=INTEGER}
+    </if>
+    ORDER BY is_urgent
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+  
+  <select id="orderStatisticList" parameterType="com.sztx.wsy.core.service.domain.request.OrderStatisticReq" resultMap="ProduceOrderDO">
+   select
+    <include refid="column_List" />
+    from produce_order where 1=1 
+			
+		<if test="orderStatisticReq.sqlType == 2">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE employee_no = #{orderStatisticReq.vampEmployeeNo} and type = 1)
+		</if>
+		<if test="orderStatisticReq.sqlType == 3">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE employee_no = #{orderStatisticReq.soleEmployeeNo} and type = 2)
+		</if>
+		<if test="orderStatisticReq.sqlType == 4">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE (employee_no = #{orderStatisticReq.vampEmployeeNo} and type = 1) and (employee_no = #{orderStatisticReq.soleEmployeeNo} and type = 2))
+		</if>
+		
+		<if test="orderStatisticReq.startTime != null and orderStatisticReq.startTime != ''">
+			and create_time <![CDATA[>=]]> #{orderStatisticReq.startTime}
+		</if>
+		<if test="orderStatisticReq.endTime != null and orderStatisticReq.endTime != ''">
+			and create_time <![CDATA[<=]]> #{orderStatisticReq.endTime}
+		</if>
+		<if test="orderStatisticReq.orderName != null and orderStatisticReq.orderName != ''">
+			and order_name LIKE CONCAT('%',#{orderStatisticReq.orderName},'%')
+		</if>
+		and qc_status = 1
+		order by create_time desc
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+  </select>
+
+  <select id="orderStatisticCount" parameterType="com.sztx.wsy.core.service.domain.request.OrderStatisticReq" resultType="java.lang.Integer">
+  	select count(*)
+    from produce_order where 1=1 
+			
+		<if test="orderStatisticReq.sqlType == 2">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE employee_no = #{orderStatisticReq.vampEmployeeNo} and type = 1)
+		</if>
+		<if test="orderStatisticReq.sqlType == 3">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE employee_no = #{orderStatisticReq.soleEmployeeNo} and type = 2)
+		</if>
+		<if test="orderStatisticReq.sqlType == 4">
+			and order_no in (SELECT distinct produce_order_no from produce_order_product_distribute WHERE (employee_no = #{orderStatisticReq.vampEmployeeNo} and type = 1) and (employee_no = #{orderStatisticReq.soleEmployeeNo} and type = 2))
+		</if>
+		
+		<if test="orderStatisticReq.startTime != null and orderStatisticReq.startTime != ''">
+			and create_time <![CDATA[>=]]> #{orderStatisticReq.startTime}
+		</if>
+		<if test="orderStatisticReq.endTime != null and orderStatisticReq.endTime != ''">
+			and create_time <![CDATA[<=]]> #{orderStatisticReq.endTime}
+		</if>
+		<if test="orderStatisticReq.orderName != null and orderStatisticReq.orderName != ''">
+			and order_name LIKE CONCAT('%',#{orderStatisticReq.orderName},'%')
+		</if>
+		and qc_status = 1
+  </select>
+</mapper>

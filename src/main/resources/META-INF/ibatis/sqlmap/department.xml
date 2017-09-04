@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.DepartmentMysqlDAO">
+
+  <resultMap id="DepartmentDO" type="com.sztx.wsy.dataaccess.domain.DepartmentDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="function" jdbcType="VARCHAR" property="function" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, name, function
+  </sql>
+
+  <select id="findById" parameterType="java.lang.Integer" resultMap="DepartmentDO">
+    select 
+    <include refid="column_List" />
+    from department
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete">
+    delete from department
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="save" parameterType="com.sztx.wsy.dataaccess.domain.DepartmentDO">
+    insert into department (name, function)
+    values (#{name,jdbcType=VARCHAR}, #{function,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.DepartmentDO">
+  	update department
+  	<set>
+  		<if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+  		<if test="function != null and function != ''">function = #{function,jdbcType=VARCHAR}</if>
+  	</set>
+  	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="listCount" resultType="java.lang.Integer">
+    select count(*) from department
+  </select>
+
+  <select id="listPage" resultMap="DepartmentDO">
+  select
+    <include refid="column_List" />
+    from department
+	
+	order by id
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+
+</mapper>

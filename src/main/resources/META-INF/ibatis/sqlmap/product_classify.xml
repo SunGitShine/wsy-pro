@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProductClassifyMysqlDAO">
+
+  <resultMap id="ProductClassifyDO" type="com.sztx.wsy.dataaccess.domain.ProductClassifyDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, classify_name
+  </sql>
+
+  <select id="findById" parameterType="java.lang.Integer" resultMap="ProductClassifyDO">
+    select 
+    <include refid="column_List" />
+    from product_classify
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete">
+    delete from product_classify
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProductClassifyDO">
+    insert into product_classify (classify_name)
+    values (#{classifyName,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.ProductClassifyDO">
+  	update product_classify
+  	<set>
+  		<if test="classifyName != null and classifyName != ''">classify_name = #{classifyName,jdbcType=VARCHAR}</if>
+  	</set>
+  	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="totalCount" resultType="java.lang.Integer">
+    select count(*) from product_classify
+  </select>
+
+  <select id="findByPage" resultMap="ProductClassifyDO">
+  select
+    <include refid="column_List" />
+    from product_classify 
+    
+	order by id
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProduceOrderProductDistributeMysqlDAO">
+
+  <resultMap id="ProduceOrderProductDistributeDO" type="com.sztx.wsy.dataaccess.domain.ProduceOrderProductDistributeDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="produce_order_product_detail_id" jdbcType="INTEGER" property="produceOrderProductDetailId" />
+    <result column="produce_order_product_id" jdbcType="INTEGER" property="produceOrderProductId" />
+    <result column="produce_order_no" jdbcType="VARCHAR" property="produceOrderNo" />
+    <result column="shoe_code" jdbcType="INTEGER" property="shoeCode" />
+    <result column="shoe_num" jdbcType="INTEGER" property="shoeNum" />
+    <result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
+    <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, produce_order_product_detail_id, produce_order_product_id, produce_order_no, 
+    shoe_code, shoe_num, employee_no, employee_name, type
+  </sql>
+
+  <select id="findByDetailId" parameterType="java.lang.Integer" resultMap="ProduceOrderProductDistributeDO">
+    select 
+    <include refid="column_List" />
+    from produce_order_product_distribute
+    where produce_order_product_detail_id = #{produceOrderProductDetailId,jdbcType=INTEGER}
+    and type = #{type,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete">
+    delete from produce_order_product_distribute
+    where produce_order_no = #{orderNo,jdbcType=VARCHAR}
+    and type = #{type,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="batchAdd" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderProductDistributeDO">
+    insert into produce_order_product_distribute (produce_order_product_detail_id, 
+      produce_order_product_id, produce_order_no, 
+      shoe_code, shoe_num, employee_no, 
+      employee_name, type)
+    values 
+      <foreach collection="produceOrderProductDistributeList" item="item" index="index" separator=",">
+           (#{item.produceOrderProductDetailId},#{item.produceOrderProductId},#{item.produceOrderNo},
+           #{item.shoeCode},#{item.shoeNum},#{item.employeeNo},
+           #{item.employeeName},#{item.type})
+       </foreach>
+  </insert>
+  
+  <!-- <select id="listCount" resultType="java.lang.Integer">
+    select count(*) from produce_order_product_distribute
+     where 1=1 
+    <if test="produceOrderProductDistributeDO.produceOrderProductDetailId != null and produceOrderProductDistributeDO.produceOrderProductDetailId != '' ">
+       and produce_order_product_detail_id = #{produceOrderProductDistributeDO.produceOrderProductDetailId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.produceOrderProductId != null and produceOrderProductDistributeDO.produceOrderProductId != '' ">
+       and produce_order_product_id = #{produceOrderProductDistributeDO.produceOrderProductId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.produceOrderId != null and produceOrderProductDistributeDO.produceOrderId != '' ">
+       and produce_order_id = #{produceOrderProductDistributeDO.produceOrderId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.shoeCode != null and produceOrderProductDistributeDO.shoeCode != '' ">
+       and shoe_code = #{produceOrderProductDistributeDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.shoeNum != null and produceOrderProductDistributeDO.shoeNum != '' ">
+       and shoe_num = #{produceOrderProductDistributeDO.shoeNum,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.employeeId != null and produceOrderProductDistributeDO.employeeId != '' ">
+       and employee_id = #{produceOrderProductDistributeDO.employeeId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.employeeName != null and produceOrderProductDistributeDO.employeeName != '' ">
+       and employee_name = #{produceOrderProductDistributeDO.employeeName,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.type != null and produceOrderProductDistributeDO.type != '' ">
+       and type = #{produceOrderProductDistributeDO.type,jdbcType=INTEGER}
+    </if>
+
+  </select>
+
+  <select id="listPage" resultMap="ProduceOrderProductDistributeDO">
+  select
+    <include refid="column_List" />
+    from produce_order_product_distribute where 1=1 
+    <if test="produceOrderProductDistributeDO.produceOrderProductDetailId != null and produceOrderProductDistributeDO.produceOrderProductDetailId != '' ">
+       and produce_order_product_detail_id = #{produceOrderProductDistributeDO.produceOrderProductDetailId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.produceOrderProductId != null and produceOrderProductDistributeDO.produceOrderProductId != '' ">
+       and produce_order_product_id = #{produceOrderProductDistributeDO.produceOrderProductId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.produceOrderId != null and produceOrderProductDistributeDO.produceOrderId != '' ">
+       and produce_order_id = #{produceOrderProductDistributeDO.produceOrderId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.shoeCode != null and produceOrderProductDistributeDO.shoeCode != '' ">
+       and shoe_code = #{produceOrderProductDistributeDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.shoeNum != null and produceOrderProductDistributeDO.shoeNum != '' ">
+       and shoe_num = #{produceOrderProductDistributeDO.shoeNum,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.employeeId != null and produceOrderProductDistributeDO.employeeId != '' ">
+       and employee_id = #{produceOrderProductDistributeDO.employeeId,jdbcType=INTEGER}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.employeeName != null and produceOrderProductDistributeDO.employeeName != '' ">
+       and employee_name = #{produceOrderProductDistributeDO.employeeName,jdbcType=VARCHAR}
+    </if>
+
+    <if test="produceOrderProductDistributeDO.type != null and produceOrderProductDistributeDO.type != '' ">
+       and type = #{produceOrderProductDistributeDO.type,jdbcType=INTEGER}
+    </if>
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select> -->
+
+</mapper>

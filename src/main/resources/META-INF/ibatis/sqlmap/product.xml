@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProductMysqlDAO">
+
+  <resultMap id="ProductDO" type="com.sztx.wsy.dataaccess.domain.ProductDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="colour" jdbcType="VARCHAR" property="colour" />
+    <result column="classify_id" jdbcType="INTEGER" property="classifyId" />
+    <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+    <result column="apply_sex" jdbcType="INTEGER" property="applySex" />
+    <result column="apply_crowd" jdbcType="INTEGER" property="applyCrowd" />
+    <result column="max_code" jdbcType="INTEGER" property="maxCode" />
+    <result column="min_code" jdbcType="INTEGER" property="minCode" />
+    <result column="vamp_material" jdbcType="VARCHAR" property="vampMaterial" />
+    <result column="sole_material" jdbcType="VARCHAR" property="soleMaterial" />
+    <result column="flower_type" jdbcType="VARCHAR" property="flowerType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="store_total_num" jdbcType="INTEGER" property="storeTotalNum" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, name, url, colour, classify_id, classify_name, apply_sex, apply_crowd, max_code, 
+    min_code, vamp_material, sole_material, flower_type, remark, status, store_total_num, 
+    create_user, create_time, update_user, update_time
+  </sql>
+
+  <select id="findById" parameterType="java.lang.Integer" resultMap="ProductDO">
+    select 
+    <include refid="column_List" />
+    from product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findByName" parameterType="java.lang.String" resultMap="ProductDO">
+    select 
+    <include refid="column_List" />
+    from product
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete">
+    delete from product
+    where id = #{productId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProductDO">
+    insert into product (name, url, 
+      colour, classify_id, classify_name, 
+      apply_sex, apply_crowd, max_code, 
+      min_code, vamp_material, sole_material, 
+      flower_type, remark, create_user, create_time, 
+      update_user, update_time)
+    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{colour,jdbcType=VARCHAR}, #{classifyId,jdbcType=INTEGER}, #{classifyName,jdbcType=VARCHAR}, 
+      #{applySex,jdbcType=INTEGER}, #{applyCrowd,jdbcType=INTEGER}, #{maxCode,jdbcType=INTEGER}, 
+      #{minCode,jdbcType=INTEGER}, #{vampMaterial,jdbcType=VARCHAR}, #{soleMaterial,jdbcType=VARCHAR}, 
+      #{flowerType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, now(), 
+      #{updateUser,jdbcType=VARCHAR}, now())
+      <selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.DepartmentDO">
+  	update product
+  	<set>
+  		<if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+  		<if test="url != null and url != ''">url = #{url,jdbcType=VARCHAR},</if>
+  		<if test="classifyId != null">classify_id = #{classifyId,jdbcType=INTEGER},</if>
+  		<if test="classifyName != null and classifyName != ''">classify_name = #{classifyName,jdbcType=VARCHAR},</if>
+  		<if test="applySex != null">apply_sex = #{applySex,jdbcType=INTEGER},</if>
+  		<if test="applyCrowd != null">apply_crowd = #{applyCrowd,jdbcType=INTEGER},</if>
+  		<if test="vampMaterial != null and vampMaterial != ''">vamp_material = #{vampMaterial,jdbcType=VARCHAR},</if>
+  		<if test="soleMaterial != null and soleMaterial != ''">sole_material = #{soleMaterial,jdbcType=VARCHAR},</if>
+  		<if test="flowerType != null and flowerType != ''">flower_type = #{flowerType,jdbcType=VARCHAR},</if>
+  		<if test="remark != null and remark != ''">remark = #{remark,jdbcType=VARCHAR},</if>
+  		<if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+  		<if test="storeTotalNum != null">store_total_num = #{storeTotalNum,jdbcType=INTEGER},</if>
+  		update_user = #{updateUser,jdbcType=VARCHAR},
+  		update_time = now()
+  	</set>
+  	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="totalCount" resultType="java.lang.Integer">
+    select count(*) from product
+     where 1=1 
+    <if test="productDO.id != null">
+       and id = #{productDO.id,jdbcType=INTEGER}
+    </if>
+     
+    <if test="productDO.name != null and productDO.name != '' ">
+       and name LIKE CONCAT('%',#{productDO.name},'%')
+    </if>
+
+    <if test="productDO.classifyId != null and productDO.classifyId != '' ">
+       and classify_id = #{productDO.classifyId,jdbcType=INTEGER}
+    </if>
+    
+    <if test="productDO.status != null">
+       and status = #{productDO.status,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="findByPage" resultMap="ProductDO">
+  select
+    <include refid="column_List" />
+    from product where 1=1 
+    <if test="productDO.id != null">
+       and id = #{productDO.id,jdbcType=INTEGER}
+    </if>
+     
+    <if test="productDO.name != null and productDO.name != '' ">
+       and name LIKE CONCAT('%',#{productDO.name},'%')
+    </if>
+
+    <if test="productDO.classifyId != null and productDO.classifyId != '' ">
+       and classify_id = #{productDO.classifyId,jdbcType=INTEGER}
+    </if>
+    
+    <if test="productDO.status != null">
+       and status = #{productDO.status,jdbcType=INTEGER}
+    </if>
+    
+    order by create_time desc
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProductStoreOperateMysqlDAO">
+
+  <resultMap id="ProductStoreOperateDO" type="com.sztx.wsy.dataaccess.domain.ProductStoreOperateDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="store_before_num" jdbcType="INTEGER" property="storeBeforeNum" />
+    <result column="store_after_num" jdbcType="INTEGER" property="storeAfterNum" />
+    <result column="store_operate_num" jdbcType="INTEGER" property="storeOperateNum" />
+    <result column="remak" jdbcType="VARCHAR" property="remak" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="store_before" jdbcType="LONGVARCHAR" property="storeBefore" />
+    <result column="store_after" jdbcType="LONGVARCHAR" property="storeAfter" />
+    <result column="store_set" jdbcType="LONGVARCHAR" property="storeSet" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, product_id, product_name, type, store_before_num, store_after_num, store_operate_num, remak, 
+    create_user, create_time, store_before, store_after, store_set
+  </sql>
+
+  <select id="findByProductId" parameterType="java.lang.Integer" resultMap="ProductStoreOperateDO">
+    select 
+    <include refid="column_List" />
+    from product_store_operate
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <!-- <delete id="delete">
+    delete from product_store_operate
+    where id = #{id,jdbcType=INTEGER}
+  </delete> -->
+
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProductStoreOperateDO">
+    insert into product_store_operate (product_id, product_name, type, 
+      store_before_num, store_after_num, store_operate_num, 
+      remak, create_user, create_time, 
+      store_before, store_after, store_set
+      )
+    values (#{productId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{storeBeforeNum,jdbcType=INTEGER}, #{storeAfterNum,jdbcType=INTEGER}, #{storeOperateNum,jdbcType=INTEGER}, 
+      #{remak,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, now(), 
+      #{storeBefore,jdbcType=LONGVARCHAR}, #{storeAfter,jdbcType=LONGVARCHAR}, #{storeSet,jdbcType=LONGVARCHAR}
+      )
+      <selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+  </insert>
+
+  <select id="totalCount" resultType="java.lang.Integer" parameterType="com.sztx.wsy.core.service.domain.request.ProductStoreOperateListReq">
+    select count(*) from product_store_operate
+     where 1=1 
+    <if test="request.productId != null">
+       and product_id = #{request.productId,jdbcType=INTEGER}
+    </if>
+
+    <if test="request.type != null">
+       and type = #{request.type,jdbcType=INTEGER}
+    </if>
+
+    <if test="request.createUser != null and request.createUser != '' ">
+       and create_user LIKE CONCAT('%',#{request.createUser,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="request.startTime != null and request.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{request.startTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    <if test="request.endTime != null and request.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{request.endTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="findByPage" resultMap="ProductStoreOperateDO" parameterType="com.sztx.wsy.core.service.domain.request.ProductStoreOperateListReq">
+  select
+    <include refid="column_List" />
+    from product_store_operate where 1=1 
+    <if test="request.productId != null">
+       and product_id = #{request.productId,jdbcType=INTEGER}
+    </if>
+
+    <if test="request.type != null">
+       and type = #{request.type,jdbcType=INTEGER}
+    </if>
+
+    <if test="request.createUser != null and request.createUser != '' ">
+       and create_user LIKE CONCAT('%',#{request.createUser,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="request.startTime != null and request.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{request.startTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    <if test="request.endTime != null and request.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{request.endTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    order by create_time desc
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select> 
+
+</mapper>

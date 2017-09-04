@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ProductStoreSetMysqlDAO">
+
+  <resultMap id="ProductStoreSetDO" type="com.sztx.wsy.dataaccess.domain.ProductStoreSetDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="shoe_code" jdbcType="INTEGER" property="shoeCode" />
+    <result column="store_max" jdbcType="INTEGER" property="storeMax" />
+    <result column="store_min" jdbcType="INTEGER" property="storeMin" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, product_id, shoe_code, store_max, store_min
+  </sql>
+
+  <select id="findByProductId" parameterType="java.lang.Integer" resultMap="ProductStoreSetDO">
+    select 
+    <include refid="column_List" />
+    from product_store_set
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <!-- <delete id="delete">
+    delete from product_store_set
+    where id = #{id,jdbcType=INTEGER}
+  </delete> -->
+
+  <insert id="batchAdd" parameterType="com.sztx.wsy.dataaccess.domain.ProductStoreSetDO">
+    insert into product_store_set (product_id, shoe_code, store_max, store_min)
+    values 
+    	<foreach collection="productStoreSetList" item="item" index="index" separator=",">
+           (#{item.productId},#{item.shoeCode},#{item.storeMax},#{item.storeMin})
+        </foreach>
+  </insert>
+
+  <!-- <select id="listCount" resultType="java.lang.Integer">
+    select count(*) from product_store_set
+     where 1=1 
+    <if test="productStoreSetDO.productId != null and productStoreSetDO.productId != '' ">
+       and product_id = #{productStoreSetDO.productId,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.shoeCode != null and productStoreSetDO.shoeCode != '' ">
+       and shoe_code = #{productStoreSetDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.storeMax != null and productStoreSetDO.storeMax != '' ">
+       and store_max = #{productStoreSetDO.storeMax,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.storeMin != null and productStoreSetDO.storeMin != '' ">
+       and store_min = #{productStoreSetDO.storeMin,jdbcType=INTEGER}
+    </if>
+
+  </select>
+
+  <select id="listPage" resultMap="ProductStoreSetDO">
+  select
+    <include refid="column_List" />
+    from product_store_set where 1=1 
+    <if test="productStoreSetDO.productId != null and productStoreSetDO.productId != '' ">
+       and product_id = #{productStoreSetDO.productId,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.shoeCode != null and productStoreSetDO.shoeCode != '' ">
+       and shoe_code = #{productStoreSetDO.shoeCode,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.storeMax != null and productStoreSetDO.storeMax != '' ">
+       and store_max = #{productStoreSetDO.storeMax,jdbcType=INTEGER}
+    </if>
+
+    <if test="productStoreSetDO.storeMin != null and productStoreSetDO.storeMin != '' ">
+       and store_min = #{productStoreSetDO.storeMin,jdbcType=INTEGER}
+    </if>
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+ -->
+</mapper>
