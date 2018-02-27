@@ -30,6 +30,9 @@
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone" />
+    <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
   </resultMap>
 
   <sql id="column_List">
@@ -37,7 +40,8 @@
     qc_status, tailor_status, tailor_finish_time, tailor_finish_user, vamp_handle_time, 
     vamp_handle_user, vamp_finish_time, vamp_finish_user, 
     sole_handle_time, sole_handle_user, sole_finish_time, sole_finish_user, qc_finish_time, 
-    qc_finish_user, create_time, create_user, update_time, update_user
+    qc_finish_user, create_time, create_user, update_time, update_user, customer_name,
+    customer_phone, delivery_address
   </sql>
 
   <select id="findByOrderNo" parameterType="java.lang.String" resultMap="ProduceOrderDO">
@@ -55,11 +59,12 @@
   <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderDO">
     insert into produce_order (order_no, order_name, 
       is_urgent, delivery_time, order_num, order_amount, create_time, create_user, 
-      update_time, update_user)
+      update_time, update_user, customer_name, customer_phone, delivery_address)
     values (#{orderNo,jdbcType=VARCHAR}, #{orderName,jdbcType=VARCHAR}, 
       #{isUrgent,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=INTEGER}, 
       #{orderAmount,jdbcType=DECIMAL}, now(), #{createUser,jdbcType=VARCHAR}, 
-      now(), #{updateUser,jdbcType=VARCHAR})
+      now(), #{updateUser,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, 
+      #{deliveryAddress,jdbcType=VARCHAR})
   </insert>
   
   <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.ProduceOrderDO">

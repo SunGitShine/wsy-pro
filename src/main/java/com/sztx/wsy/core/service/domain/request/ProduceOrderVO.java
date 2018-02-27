@@ -156,6 +156,21 @@ public class ProduceOrderVO implements Serializable,Comparable<ProduceOrderVO>{
 	private List<ProduceOrderProductVO> produceOrderProductVOs;
 	
 	/**
+	 * 客户名称
+	 */
+	private String customerName;
+	
+	/**
+	 * 客户电话
+	 */
+	private String customerPhone;
+	
+	/**
+	 * 收货地址
+	 */
+	private String deliveryAddress;
+	
+	/**
 	 * @return id
 	 */
 	public Integer getId() {
@@ -532,6 +547,30 @@ public class ProduceOrderVO implements Serializable,Comparable<ProduceOrderVO>{
 
 	public void setOrderPic(String orderPic) {
 		this.orderPic = orderPic;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
 	}
 
 	@Override

@@ -37,6 +37,7 @@ public class ProduceOrderController extends BaseController{
 	public Result add(HttpServletRequest request){
 		
 		Integer smsIsOpen = ParameterUtil.getInteger("smsIsOpen");
+		Integer isCreatDeliveryNote = ParameterUtil.getInteger("isCreatDeliveryNote");
 		
 		ProduceOrderVO produceOrderVO = makeProduceOrderVO(request);
 		
@@ -105,6 +106,7 @@ public class ProduceOrderController extends BaseController{
 		produceOrderDO.setTailorStatus(1);
 		produceOrderDO.setTailorFinishTime(new Date());
 		produceOrderDO.setTailorFinishUser(LoginUtil.currentRealname());
+		
 		
 		produceOrderService.updateStatus(produceOrderDO, null);
 		
