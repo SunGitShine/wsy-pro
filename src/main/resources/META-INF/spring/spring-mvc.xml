@@ -191,6 +191,16 @@
 	    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
+	<bean id="receiptMysqlDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	    <property name="mapperInterface" value="com.sztx.wsy.dataaccess.dao.ReceiptMysqlDAO"></property>
+	    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="receiptProductMysqlDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	    <property name="mapperInterface" value="com.sztx.wsy.dataaccess.dao.ReceiptProductMysqlDAO"></property>
+	    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
 	<mvc:interceptors>  
         <mvc:interceptor>  
             <mvc:mapping path="/**" />

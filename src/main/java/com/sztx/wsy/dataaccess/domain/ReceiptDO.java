@@ -72,7 +72,7 @@ public class ReceiptDO implements Serializable{
 	/**
 	 * 票据商品
 	 */
-	private List<ReceiptProductDO> receiptProducts;
+	private List<ReceiptProductDO> products;
 	
 	public Integer getId() {
 		return id;
@@ -98,11 +98,11 @@ public class ReceiptDO implements Serializable{
 	public void setDeliveryAddress(String deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
 	}
-	public List<ReceiptProductDO> getReceiptProducts() {
-		return receiptProducts;
+	public List<ReceiptProductDO> getProducts() {
+		return products;
 	}
-	public void setReceiptProducts(List<ReceiptProductDO> receiptProducts) {
-		this.receiptProducts = receiptProducts;
+	public void setProducts(List<ReceiptProductDO> products) {
+		this.products = products;
 	}
 	public String getCreateUser() {
 		return createUser;

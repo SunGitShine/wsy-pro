@@ -2,6 +2,8 @@ package com.sztx.wsy.dataaccess.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sztx.wsy.common.domain.PageQuery;
 import com.sztx.wsy.core.service.domain.request.ReceiptPageReq;
 import com.sztx.wsy.dataaccess.domain.ReceiptDO;
@@ -12,11 +14,12 @@ public interface ReceiptMysqlDAO {
 	
 	void update(ReceiptDO receiptDO);
 	
-	void deleteByOrderNo(String orderNo);
+	void deleteByOrderNo(@Param("orderNo")String orderNo);
 	
-	ReceiptDO findByOrderNo(String orderNo);
+	ReceiptDO findByOrderNo(@Param("orderNo")String orderNo);
 	
-	Integer totalCount(ReceiptPageReq receiptPageReq);
+	Integer totalCount(@Param("receiptPageReq")ReceiptPageReq receiptPageReq);
 	
-	List<ReceiptDO> findByPage(ReceiptPageReq receiptPageReq, PageQuery pageQuery);
+	List<ReceiptDO> findByPage(@Param("receiptPageReq")ReceiptPageReq receiptPageReq, 
+			@Param("pageQuery")PageQuery pageQuery);
 }

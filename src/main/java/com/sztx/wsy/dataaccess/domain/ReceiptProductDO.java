@@ -28,7 +28,7 @@ public class ReceiptProductDO implements Serializable{
 	/**
 	 * 产品数量
 	 */
-	private Integer productum;
+	private Integer productNum;
 	/**
 	 * 产品单价
 	 */
@@ -56,11 +56,11 @@ public class ReceiptProductDO implements Serializable{
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public Integer getProductum() {
-		return productum;
+	public Integer getProductNum() {
+		return productNum;
 	}
-	public void setProductum(Integer productum) {
-		this.productum = productum;
+	public void setProductNum(Integer productNum) {
+		this.productNum = productNum;
 	}
 	public Integer getProductPrice() {
 		return productPrice;

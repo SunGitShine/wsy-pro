@@ -468,7 +468,7 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 			receiptProductDO.setOrderNo(orderNo);
 			receiptProductDO.setProductName(produceOrderProductVO.getProductName());
 			receiptProductDO.setProductPrice(produceOrderProductDO.getProducePrice());
-			receiptProductDO.setProductum(shoeNum);
+			receiptProductDO.setProductNum(shoeNum);
 			receiptProductDO.setTotalMoney(produceAmount);
 			receiptProducts.add(receiptProductDO);
 		}
