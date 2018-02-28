@@ -36,12 +36,12 @@ public class ProduceOrderController extends BaseController{
 	@RequestMapping(value = "/add")
 	public Result add(HttpServletRequest request){
 		
-		Integer smsIsOpen = ParameterUtil.getInteger("smsIsOpen");
-		Integer isCreatDeliveryNote = ParameterUtil.getInteger("isCreatDeliveryNote");
+		Integer smsIsOpen = ParameterUtil.getInteger("smsIsOpen");//是否发短信通知
+		Integer isCreatDeliveryNote = ParameterUtil.getInteger("isCreatDeliveryNote");//是否创建送货单
 		
 		ProduceOrderVO produceOrderVO = makeProduceOrderVO(request);
 		
-		produceOrderService.add(produceOrderVO, smsIsOpen);
+		produceOrderService.add(produceOrderVO, smsIsOpen, isCreatDeliveryNote);
 		return ParameterUtil.commonSuccessResult();
 	}
 	
@@ -91,8 +91,9 @@ public class ProduceOrderController extends BaseController{
 	public Result update(HttpServletRequest request){
 		
 		ProduceOrderVO produceOrderVO = makeProduceOrderVO(request);
+		Integer isCreatDeliveryNote = ParameterUtil.getInteger("isCreatDeliveryNote");//是否创建送货单
 		
-		produceOrderService.update(produceOrderVO);
+		produceOrderService.update(produceOrderVO, isCreatDeliveryNote);
 		return ParameterUtil.commonSuccessResult();
 	}
 	

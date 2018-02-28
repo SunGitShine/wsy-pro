@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztx.wsy.dataaccess.dao.ReceiptMysqlDAO">
+
+  <resultMap id="ProductDO" type="com.sztx.wsy.dataaccess.domain.ReceiptDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="customer_phone" jdbcType="INTEGER" property="customerPhone" />
+    <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
+    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
+    <result column="total_money" jdbcType="INTEGER" property="totalMoney" />
+    <result column="balance_status" jdbcType="INTEGER" property="balanceStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_receipt_time" jdbcType="TIMESTAMP" property="createReceiptTime" />
+    <result column="balance_time" jdbcType="TIMESTAMP" property="balanceTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <sql id="column_List">
+    id, order_no, order_name, customer_name, customer_phone, delivery_address, total_num, total_money, balance_status, 
+    create_time, create_receipt_time, balance_time, create_user, update_user
+  </sql>
+  
+  <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ReceiptDO">
+    insert into receipt (order_no, order_name, customer_name, customer_phone, 
+    delivery_address, total_num, total_money, balance_status, 
+    create_time, create_user, update_user)
+    values (#{orderNo,jdbcType=VARCHAR}, #{orderName,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{deliveryAddress,jdbcType=VARCHAR}, 
+      #{totalNum,jdbcType=INTEGER}, #{totalMoney,jdbcType=INTEGER}, #{balanceStatus,jdbcType=INTEGER}, 
+      now(), #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR})
+      <selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+  </insert>
+  
+  <update id="update" parameterType="com.sztx.wsy.dataaccess.domain.ReceiptDO">
+  	update receipt
+  	<set>
+  		<if test="orderName != null and orderName != ''">order_name = #{orderName,jdbcType=VARCHAR},</if>
+  		<if test="customerName != null and customerName != ''">customer_name = #{customerName,jdbcType=VARCHAR},</if>
+  		<if test="customerPhone != null and customerPhone != ''">customer_phone = #{customerPhone,jdbcType=VARCHAR},</if>
+  		<if test="deliveryAddress != null and deliveryAddress != ''">delivery_address = #{deliveryAddress,jdbcType=VARCHAR},</if>
+  		<if test="totalNum != null">total_num = #{totalNum,jdbcType=INTEGER},</if>
+  		<if test="totalMoney != null">total_money = #{totalMoney,jdbcType=INTEGER},</if>
+  		<if test="balanceStatus != null">balance_status = #{balanceStatus,jdbcType=INTEGER},</if>
+  		<if test="createReceiptTime != null and createReceiptTime != ''">create_receipt_time = #{createReceiptTime,jdbcType=TIMESTAMP},</if>
+  		<if test="balanceTime != null and balanceTime != ''">balance_time = #{balanceTime,jdbcType=TIMESTAMP},</if>
+  		update_user = #{updateUser,jdbcType=VARCHAR},
+  	</set>
+  	where order_no = #{orderNo,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findByOrderNo" parameterType="java.lang.String" resultMap="ProductDO">
+    select 
+    <include refid="column_List" />
+    from receipt
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByOrderNo">
+    delete from receipt
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="totalCount" resultType="java.lang.Integer" parameterType="com.sztx.wsy.core.service.domain.request.ReceiptPageReq">
+    select count(*) from product
+     where 1=1 
+    <if test="ReceiptPageReq.orderNo != null and ReceiptPageReq.orderNo != ''">
+       and order_no = #{ReceiptPageReq.orderNo,jdbcType=VARCHAR}
+    </if>
+     
+    <if test="ReceiptPageReq.orderName != null and ReceiptPageReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{ReceiptPageReq.orderName},'%')
+    </if>
+
+    <if test="ReceiptPageReq.customerName != null and ReceiptPageReq.customerName != '' ">
+       and customer_name = #{ReceiptPageReq.customerName,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="ReceiptPageReq.balanceStatus != null">
+       and balance_status = #{ReceiptPageReq.balanceStatus,jdbcType=INTEGER}
+    </if>
+    
+    <if test="ReceiptPageReq.startTime != null and ReceiptPageReq.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{ReceiptPageReq.startTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    <if test="ReceiptPageReq.endTime != null and ReceiptPageReq.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{ReceiptPageReq.endTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="findByPage" resultMap="ProductDO">
+  select
+    <include refid="column_List" />
+    from product where 1=1 
+    <if test="ReceiptPageReq.orderNo != null and ReceiptPageReq.orderNo != ''">
+       and order_no = #{ReceiptPageReq.orderNo,jdbcType=VARCHAR}
+    </if>
+     
+    <if test="ReceiptPageReq.orderName != null and ReceiptPageReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{ReceiptPageReq.orderName},'%')
+    </if>
+
+    <if test="ReceiptPageReq.customerName != null and ReceiptPageReq.customerName != '' ">
+       and customer_name = #{ReceiptPageReq.customerName,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="ReceiptPageReq.balanceStatus != null">
+       and balance_status = #{ReceiptPageReq.balanceStatus,jdbcType=INTEGER}
+    </if>
+    
+    <if test="ReceiptPageReq.startTime != null and ReceiptPageReq.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{ReceiptPageReq.startTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    <if test="ReceiptPageReq.endTime != null and ReceiptPageReq.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{ReceiptPageReq.endTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    order by create_time desc
+
+    <if test="pageQuery != null">
+      limit #{pageQuery.start} , #{pageQuery.pageSize} 
+    </if>
+
+  </select>
+
+</mapper>

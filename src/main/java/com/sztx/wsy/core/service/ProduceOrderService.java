@@ -10,11 +10,10 @@ import com.sztx.wsy.core.service.domain.request.ProduceOrderListReq;
 import com.sztx.wsy.core.service.domain.request.ProduceOrderVO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderDO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderProductDistributeDO;
-import com.sztx.wsy.util.LoginUtil;
 
 public interface ProduceOrderService {
 
-	void add(ProduceOrderVO produceOrderVO, Integer smsIsOpen);
+	void add(ProduceOrderVO produceOrderVO, Integer smsIsOpen, Integer isCreatDeliveryNote);
 	
 	List<ProduceOrderVO> findOrderList(ProduceOrderListReq req, PageQuery pageQuery);
 	
@@ -26,7 +25,7 @@ public interface ProduceOrderService {
 	
 	void delete(String orderNo);
 	
-	void update(ProduceOrderVO produceOrderVO);
+	void update(ProduceOrderVO produceOrderVO, Integer isCreatDeliveryNote);
 	
 	void updateStatus(ProduceOrderDO produceOrderDO, Integer smsIsOpen);
 	

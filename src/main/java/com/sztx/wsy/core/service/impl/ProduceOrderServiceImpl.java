@@ -26,11 +26,15 @@ import com.sztx.wsy.dataaccess.dao.ProduceOrderMysqlDAO;
 import com.sztx.wsy.dataaccess.dao.ProduceOrderProductDetailMysqlDAO;
 import com.sztx.wsy.dataaccess.dao.ProduceOrderProductDistributeMysqlDAO;
 import com.sztx.wsy.dataaccess.dao.ProduceOrderProductMysqlDAO;
+import com.sztx.wsy.dataaccess.dao.ReceiptMysqlDAO;
+import com.sztx.wsy.dataaccess.dao.ReceiptProductMysqlDAO;
 import com.sztx.wsy.dataaccess.domain.AccountDO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderDO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderProductDO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderProductDetailDO;
 import com.sztx.wsy.dataaccess.domain.ProduceOrderProductDistributeDO;
+import com.sztx.wsy.dataaccess.domain.ReceiptDO;
+import com.sztx.wsy.dataaccess.domain.ReceiptProductDO;
 import com.sztx.wsy.util.LoginUtil;
 import com.sztx.wsy.util.MsgUtil;
 import com.sztx.wsy.util.StringUtil;
@@ -54,10 +58,16 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 	@Autowired
 	private AccountMysqlDAO accountMysqlDAO;
 	
+	@Autowired
+	private ReceiptMysqlDAO receiptMysqlDAO;
+	
+	@Autowired
+	private ReceiptProductMysqlDAO receiptProductMysqlDAO;
+	
 	private static final Logger log = LoggerFactory.getLogger(ProduceOrderServiceImpl.class);
 
 	@Override
-	public void add(ProduceOrderVO produceOrderVO, Integer smsIsOpen) {
+	public void add(ProduceOrderVO produceOrderVO, Integer smsIsOpen, Integer isCreatDeliveryNote) {
 		
 		Integer orderNum = chackParamAndOrderNum(produceOrderVO);
 		log.info("订单总双数：" + orderNum);
@@ -78,6 +88,23 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 		updatePsroduceOrderDO.setOrderAmount(orderAmount);
 		updatePsroduceOrderDO.setUpdateUser(produceOrderVO.getUpdateUser());
 		produceOrderMysqlDAO.update(updatePsroduceOrderDO);
+		
+		//创建送货单
+		if(isCreatDeliveryNote != null && isCreatDeliveryNote == 1){
+			
+			ReceiptDO receiptDO = new ReceiptDO();
+			receiptDO.setOrderNo(orderNo);
+			receiptDO.setOrderName(produceOrderVO.getOrderName());
+			receiptDO.setCustomerName(produceOrderVO.getCustomerName());
+			receiptDO.setCustomerPhone(produceOrderVO.getCustomerPhone());
+			receiptDO.setDeliveryAddress(produceOrderVO.getDeliveryAddress());
+			receiptDO.setTotalNum(orderNum);
+			receiptDO.setTotalMoney(Integer.parseInt(orderAmount.toString()));
+			receiptDO.setBalanceStatus(0);
+			
+			receiptMysqlDAO.add(receiptDO);//票据表插入数据
+			creatDeliveryNote(produceOrderVO, orderNo);//票据商品表插入数据
+		}
 		
 		if(smsIsOpen != null && smsIsOpen == 1){
 			//发送短信通知上案管理员
@@ -214,10 +241,12 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 		produceOrderMysqlDAO.delete(orderNo);//删除订单表
 		produceOrderProductMysqlDAO.delete(orderNo);//删除订单产品表
 		produceOrderProductDetailMysqlDAO.delete(orderNo);//删除订单产品详情表
+		receiptMysqlDAO.deleteByOrderNo(orderNo);//删除票据表
+		receiptProductMysqlDAO.deleteByOrderNo(orderNo);//删除票据商品表
 	}
 	
 	@Override
-	public void update(ProduceOrderVO produceOrderVO) {
+	public void update(ProduceOrderVO produceOrderVO, Integer isCreatDeliveryNote) {
 		
 		String orderNo = produceOrderVO.getOrderNo();
 		ValidateUtil.isNotBlank(orderNo, "生产订单编号不能为空");
@@ -228,7 +257,9 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 			produceOrderMysqlDAO.delete(orderNo);//删除订单表
 			produceOrderProductMysqlDAO.delete(orderNo);//删除订单产品表
 			produceOrderProductDetailMysqlDAO.delete(orderNo);//删除订单产品详情表
-			add(produceOrderVO,null);
+			receiptMysqlDAO.deleteByOrderNo(orderNo);//删除票据表
+			receiptProductMysqlDAO.deleteByOrderNo(orderNo);//删除票据商品表
+			add(produceOrderVO,null,isCreatDeliveryNote);
 		}else{//已进入生产流程，只更新订单表，订单产品和订单产品详情表不更新
 			ProduceOrderDO updateProduceOrderDO = new ProduceOrderDO();
 			BeanUtils.copyProperties(produceOrderVO, updateProduceOrderDO);
@@ -406,6 +437,42 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 		}
 		
 		return orderAmount;
+	}
+	
+	public void creatDeliveryNote(ProduceOrderVO produceOrderVO, String orderNo) {
+		
+		Long orderAmount = 0L;//订单总金额
+		
+		List<ReceiptProductDO> receiptProducts = new ArrayList<ReceiptProductDO>();
+		
+		List<ProduceOrderProductVO> produceOrderProductVOs = produceOrderVO.getProduceOrderProductVOs();
+		for(ProduceOrderProductVO produceOrderProductVO : produceOrderProductVOs){
+			
+			ReceiptProductDO receiptProductDO = new ReceiptProductDO();
+			
+			Integer shoeNum = 0;//产品鞋双数
+			ProduceOrderProductDO produceOrderProductDO = new ProduceOrderProductDO();
+			BeanUtils.copyProperties(produceOrderProductVO, produceOrderProductDO);
+			
+			List<ProduceOrderProductDetailDO> produceOrderProductDetailDOs = produceOrderProductVO.getProduceOrderProductDetailDOs();
+			for(ProduceOrderProductDetailDO produceOrderProductDetail : produceOrderProductDetailDOs){
+				shoeNum = shoeNum + produceOrderProductDetail.getShoeNum();
+			}
+			
+			Integer produceAmount = shoeNum*produceOrderProductDO.getProducePrice();
+			orderAmount = orderAmount + produceAmount; 
+			log.info(produceOrderProductVO.getProductName() + "的单价：" + produceOrderProductDO.getProducePrice());
+			log.info(produceOrderProductVO.getProductName() + "的双数：" + shoeNum);
+			log.info(produceOrderProductVO.getProductName() + "的金额：" + produceAmount);
+			
+			receiptProductDO.setOrderNo(orderNo);
+			receiptProductDO.setProductName(produceOrderProductVO.getProductName());
+			receiptProductDO.setProductPrice(produceOrderProductDO.getProducePrice());
+			receiptProductDO.setProductum(shoeNum);
+			receiptProductDO.setTotalMoney(produceAmount);
+			receiptProducts.add(receiptProductDO);
+		}
+		receiptProductMysqlDAO.batchAdd(receiptProducts);
 	}
 	
 	/**

@@ -90,6 +90,9 @@
   		<if test="soleFinishUser != null and soleFinishUser != ''">sole_finish_user = #{soleFinishUser},</if>
   		<if test="qcFinishTime != null and qcFinishTime != ''">qc_finish_time = #{qcFinishTime},</if>
   		<if test="qcFinishUser != null and qcFinishUser != ''">qc_finish_user = #{qcFinishUser},</if>
+  		<if test="customerName != null and customerName != ''">qc_finish_user = #{customerName},</if>
+  		<if test="customerPhone != null and customerPhone != ''">qc_finish_user = #{customerPhone},</if>
+  		<if test="deliveryAddress != null and deliveryAddress != ''">qc_finish_user = #{deliveryAddress},</if>
   		update_user = #{updateUser},
   		update_time = now()
   	</set>
