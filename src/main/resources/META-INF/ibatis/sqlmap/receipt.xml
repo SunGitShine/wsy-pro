@@ -68,59 +68,59 @@
   </delete>
 
   <select id="totalCount" resultType="java.lang.Integer" parameterType="com.sztx.wsy.core.service.domain.request.ReceiptPageReq">
-    select count(*) from product
+    select count(*) from receipt
      where 1=1 
-    <if test="ReceiptPageReq.orderNo != null and ReceiptPageReq.orderNo != ''">
-       and order_no = #{ReceiptPageReq.orderNo,jdbcType=VARCHAR}
+    <if test="receiptPageReq.orderNo != null and receiptPageReq.orderNo != ''">
+       and order_no = #{receiptPageReq.orderNo,jdbcType=VARCHAR}
     </if>
      
-    <if test="ReceiptPageReq.orderName != null and ReceiptPageReq.orderName != '' ">
-       and order_name LIKE CONCAT('%',#{ReceiptPageReq.orderName},'%')
+    <if test="receiptPageReq.orderName != null and receiptPageReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{receiptPageReq.orderName},'%')
     </if>
 
-    <if test="ReceiptPageReq.customerName != null and ReceiptPageReq.customerName != '' ">
-       and customer_name = #{ReceiptPageReq.customerName,jdbcType=VARCHAR}
+    <if test="receiptPageReq.customerName != null and receiptPageReq.customerName != '' ">
+       and customer_name = #{receiptPageReq.customerName,jdbcType=VARCHAR}
     </if>
     
-    <if test="ReceiptPageReq.balanceStatus != null">
-       and balance_status = #{ReceiptPageReq.balanceStatus,jdbcType=INTEGER}
+    <if test="receiptPageReq.balanceStatus != null">
+       and balance_status = #{receiptPageReq.balanceStatus,jdbcType=INTEGER}
     </if>
     
-    <if test="ReceiptPageReq.startTime != null and ReceiptPageReq.startTime != '' ">
-       and create_time <![CDATA[>=]]> #{ReceiptPageReq.startTime,jdbcType=TIMESTAMP}
+    <if test="receiptPageReq.startTime != null and receiptPageReq.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{receiptPageReq.startTime,jdbcType=TIMESTAMP}
     </if>
     
-    <if test="ReceiptPageReq.endTime != null and ReceiptPageReq.endTime != '' ">
-       and create_time <![CDATA[<=]]> #{ReceiptPageReq.endTime,jdbcType=TIMESTAMP}
+    <if test="receiptPageReq.endTime != null and receiptPageReq.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{receiptPageReq.endTime,jdbcType=TIMESTAMP}
     </if>
   </select>
 
   <select id="findByPage" resultMap="ProductDO">
   select
     <include refid="column_List" />
-    from product where 1=1 
-    <if test="ReceiptPageReq.orderNo != null and ReceiptPageReq.orderNo != ''">
-       and order_no = #{ReceiptPageReq.orderNo,jdbcType=VARCHAR}
+    from receipt where 1=1 
+    <if test="receiptPageReq.orderNo != null and receiptPageReq.orderNo != ''">
+       and order_no = #{receiptPageReq.orderNo,jdbcType=VARCHAR}
     </if>
      
-    <if test="ReceiptPageReq.orderName != null and ReceiptPageReq.orderName != '' ">
-       and order_name LIKE CONCAT('%',#{ReceiptPageReq.orderName},'%')
+    <if test="receiptPageReq.orderName != null and receiptPageReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{receiptPageReq.orderName},'%')
     </if>
 
-    <if test="ReceiptPageReq.customerName != null and ReceiptPageReq.customerName != '' ">
-       and customer_name = #{ReceiptPageReq.customerName,jdbcType=VARCHAR}
+    <if test="receiptPageReq.customerName != null and receiptPageReq.customerName != '' ">
+       and customer_name = #{receiptPageReq.customerName,jdbcType=VARCHAR}
     </if>
     
-    <if test="ReceiptPageReq.balanceStatus != null">
-       and balance_status = #{ReceiptPageReq.balanceStatus,jdbcType=INTEGER}
+    <if test="receiptPageReq.balanceStatus != null">
+       and balance_status = #{receiptPageReq.balanceStatus,jdbcType=INTEGER}
     </if>
     
-    <if test="ReceiptPageReq.startTime != null and ReceiptPageReq.startTime != '' ">
-       and create_time <![CDATA[>=]]> #{ReceiptPageReq.startTime,jdbcType=TIMESTAMP}
+    <if test="receiptPageReq.startTime != null and receiptPageReq.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{receiptPageReq.startTime,jdbcType=TIMESTAMP}
     </if>
     
-    <if test="ReceiptPageReq.endTime != null and ReceiptPageReq.endTime != '' ">
-       and create_time <![CDATA[<=]]> #{ReceiptPageReq.endTime,jdbcType=TIMESTAMP}
+    <if test="receiptPageReq.endTime != null and receiptPageReq.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{receiptPageReq.endTime,jdbcType=TIMESTAMP}
     </if>
     
     order by create_time desc

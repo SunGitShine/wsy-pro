@@ -8,9 +8,9 @@ import com.sztx.wsy.dataaccess.domain.ReceiptProductDO;
 
 public interface ReceiptProductMysqlDAO {
 
-	void batchAdd(List<ReceiptProductDO> receiptProducts);
+	void batchAdd(@Param("receiptProducts")List<ReceiptProductDO> receiptProducts);
 	
-	void batchUpdate(List<ReceiptProductDO> receiptProducts);
+	void batchUpdate(@Param("receiptProducts")List<ReceiptProductDO> receiptProducts);
 	
 	void deleteByOrderNo(@Param("orderNo")String orderNo);
 	

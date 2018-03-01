@@ -25,6 +25,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.sztx.wsy.interceptor.domain.RequestLog;
 import com.sztx.wsy.interceptor.domain.ResponseLog;
 
+import net.sf.json.JSONObject;
+
 /**
  * 
  * @author xq
@@ -206,9 +208,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 				responseLog.setResult(result);
 			}
 		} else {
-			String callback = (String) request.getAttribute("callback");
+			Object returnObj = request.getAttribute("returnObj"); 
+			responseLog.setResult(returnObj);
 			responseLog.setContentType(contentType);
-			responseLog.setCallback(callback);
 			responseLog.setAddr(addr);
 		}
 

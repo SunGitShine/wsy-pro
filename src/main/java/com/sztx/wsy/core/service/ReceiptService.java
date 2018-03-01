@@ -10,6 +10,8 @@ public interface ReceiptService {
 
 	void createReceipt(ReceiptDO receiptDO);
 	
+	void updateReceipt(ReceiptDO receiptDO);
+	
 	ReceiptDO getReceipt(String orderNo);
 	
 	void updateBalanceStatus(String orderNo);

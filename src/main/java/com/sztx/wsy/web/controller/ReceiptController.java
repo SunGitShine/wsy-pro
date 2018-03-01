@@ -65,9 +65,7 @@ public class ReceiptController extends BaseController{
 	public Result findBalanceList(){
 		
 		ReceiptPageReq receiptPageReq = ParameterUtil.parseObject(ReceiptPageReq.class);
-		Integer pageNo = ParameterUtil.getInteger("pageNo");
-		Integer pageSize = ParameterUtil.getInteger("pageSize");
-		PageQuery pageQuery = new PageQuery(pageNo, pageSize);
+		PageQuery pageQuery = getPageQuery();
 		
 		Integer totalCount = receiptService.totalCount(receiptPageReq);
 		List<ReceiptDO> receiptDOs = receiptService.findByPage(receiptPageReq, pageQuery);
@@ -76,4 +74,15 @@ public class ReceiptController extends BaseController{
 		result.setPage(totalCount, receiptDOs);
 		return result;
 	}
+	
+	@RequestMapping(value = "/editReceipt")
+	public Result editReceipt(){
+		
+		ReceiptDO receiptDO = ParameterUtil.parseObject(ReceiptDO.class);
+		receiptDO.setUpdateUser(LoginUtil.currentRealname());
+		
+		receiptService.updateReceipt(receiptDO);
+		return ParameterUtil.commonSuccessResult();
+	}
+	
 }

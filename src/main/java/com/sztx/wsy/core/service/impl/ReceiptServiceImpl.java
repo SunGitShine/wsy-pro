@@ -31,6 +31,7 @@ public class ReceiptServiceImpl implements ReceiptService{
 		String orderNo = sf.format(new Date());
 		
 		makeReceiptParam(receiptDO, orderNo);
+		receiptDO.setBalanceStatus(0);
 		
 		receiptMysqlDAO.add(receiptDO);
 		receiptProductMysqlDAO.batchAdd(receiptDO.getProducts());
@@ -59,7 +60,6 @@ public class ReceiptServiceImpl implements ReceiptService{
 		
 		receiptDO.setTotalNum(totalNum);
 		receiptDO.setTotalMoney(totalMoney);
-		receiptDO.setBalanceStatus(0);
 		return receiptDO;
 	}
 
@@ -101,5 +101,13 @@ public class ReceiptServiceImpl implements ReceiptService{
 	@Override
 	public List<ReceiptDO> findByPage(ReceiptPageReq receiptPageReq, PageQuery pageQuery) {
 		return receiptMysqlDAO.findByPage(receiptPageReq, pageQuery);
+	}
+
+	@Override
+	public void updateReceipt(ReceiptDO receiptDO) {
+		
+		makeReceiptParam(receiptDO, receiptDO.getOrderNo());
+		receiptMysqlDAO.update(receiptDO);
+		receiptProductMysqlDAO.batchUpdate(receiptDO.getProducts());
 	}
 }
