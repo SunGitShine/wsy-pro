@@ -130,5 +130,34 @@
     </if>
 
   </select>
+  
+  <select id="getSumMsg" resultMap="java.util.HashMap">
+  select
+    SUM() as sumNum, SUM() as sumMoney
+    from receipt where 1=1 
+    <if test="receiptPageReq.orderNo != null and receiptPageReq.orderNo != ''">
+       and order_no = #{receiptPageReq.orderNo,jdbcType=VARCHAR}
+    </if>
+     
+    <if test="receiptPageReq.orderName != null and receiptPageReq.orderName != '' ">
+       and order_name LIKE CONCAT('%',#{receiptPageReq.orderName},'%')
+    </if>
+
+    <if test="receiptPageReq.customerName != null and receiptPageReq.customerName != '' ">
+       and customer_name = #{receiptPageReq.customerName,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="receiptPageReq.balanceStatus != null">
+       and balance_status = #{receiptPageReq.balanceStatus,jdbcType=INTEGER}
+    </if>
+    
+    <if test="receiptPageReq.startTime != null and receiptPageReq.startTime != '' ">
+       and create_time <![CDATA[>=]]> #{receiptPageReq.startTime,jdbcType=TIMESTAMP}
+    </if>
+    
+    <if test="receiptPageReq.endTime != null and receiptPageReq.endTime != '' ">
+       and create_time <![CDATA[<=]]> #{receiptPageReq.endTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
 
 </mapper>

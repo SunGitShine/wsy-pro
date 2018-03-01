@@ -1,6 +1,9 @@
 package com.sztx.wsy.core.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.sztx.wsy.common.domain.PageQuery;
 import com.sztx.wsy.core.service.domain.request.ReceiptPageReq;
@@ -21,4 +24,6 @@ public interface ReceiptService {
 	Integer totalCount(ReceiptPageReq receiptPageReq);
 	
 	List<ReceiptDO> findByPage(ReceiptPageReq receiptPageReq, PageQuery pageQuery);
+	
+	Map<String, Integer> getSumMsg(ReceiptPageReq receiptPageReq);
 }

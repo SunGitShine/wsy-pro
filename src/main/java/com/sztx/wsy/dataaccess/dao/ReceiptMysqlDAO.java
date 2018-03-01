@@ -1,6 +1,7 @@
 package com.sztx.wsy.dataaccess.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,6 @@ public interface ReceiptMysqlDAO {
 	
 	List<ReceiptDO> findByPage(@Param("receiptPageReq")ReceiptPageReq receiptPageReq, 
 			@Param("pageQuery")PageQuery pageQuery);
+	
+	Map<String, Integer> getSumMsg(@Param("receiptPageReq")ReceiptPageReq receiptPageReq);
 }

@@ -1,6 +1,7 @@
 package com.sztx.wsy.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -69,9 +70,11 @@ public class ReceiptController extends BaseController{
 		
 		Integer totalCount = receiptService.totalCount(receiptPageReq);
 		List<ReceiptDO> receiptDOs = receiptService.findByPage(receiptPageReq, pageQuery);
+		Map<String, Integer> sumMap = receiptService.getSumMsg(receiptPageReq);
 		
 		Result result = new Result(ResultCode.COMMON_SUCCESS, true);
 		result.setPage(totalCount, receiptDOs);
+		result.setProperty("sumMap", sumMap);
 		return result;
 	}
 	

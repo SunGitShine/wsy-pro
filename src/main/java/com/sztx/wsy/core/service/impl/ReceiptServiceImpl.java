@@ -3,6 +3,7 @@ package com.sztx.wsy.core.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,5 +110,10 @@ public class ReceiptServiceImpl implements ReceiptService{
 		makeReceiptParam(receiptDO, receiptDO.getOrderNo());
 		receiptMysqlDAO.update(receiptDO);
 		receiptProductMysqlDAO.batchUpdate(receiptDO.getProducts());
+	}
+
+	@Override
+	public Map<String, Integer> getSumMsg(ReceiptPageReq receiptPageReq) {
+		return receiptMysqlDAO.getSumMsg(receiptPageReq);
 	}
 }

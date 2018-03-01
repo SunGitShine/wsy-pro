@@ -73,6 +73,14 @@ public class ReceiptDO implements Serializable{
 	 * 票据商品
 	 */
 	private List<ReceiptProductDO> products;
+	/**
+	 * 查询结果的总双数
+	 */
+	private Integer sumNum;
+	/**
+	 * 查询结果的总金额
+	 */
+	private Integer sumMoney;
 	
 	public Integer getId() {
 		return id;
@@ -163,5 +171,17 @@ public class ReceiptDO implements Serializable{
 	}
 	public void setBalanceTime(Date balanceTime) {
 		this.balanceTime = balanceTime;
+	}
+	public Integer getSumNum() {
+		return sumNum;
+	}
+	public void setSumNum(Integer sumNum) {
+		this.sumNum = sumNum;
+	}
+	public Integer getSumMoney() {
+		return sumMoney;
+	}
+	public void setSumMoney(Integer sumMoney) {
+		this.sumMoney = sumMoney;
 	}
 }
