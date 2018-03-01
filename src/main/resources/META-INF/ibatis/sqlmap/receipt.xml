@@ -131,9 +131,9 @@
 
   </select>
   
-  <select id="getSumMsg" resultMap="java.util.HashMap">
+  <select id="getSumMsg" resultType="java.util.HashMap">
   select
-    SUM() as sumNum, SUM() as sumMoney
+    SUM(total_num) as sumNum, SUM(total_money) as sumMoney
     from receipt where 1=1 
     <if test="receiptPageReq.orderNo != null and receiptPageReq.orderNo != ''">
        and order_no = #{receiptPageReq.orderNo,jdbcType=VARCHAR}
