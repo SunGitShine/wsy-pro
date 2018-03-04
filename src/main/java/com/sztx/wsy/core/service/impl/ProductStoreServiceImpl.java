@@ -365,4 +365,14 @@ public class ProductStoreServiceImpl implements ProductStoreService{
 			}
 		}
 	}
+
+	@Override
+	public Integer getInputNum(ProductStoreOperateListReq request) {
+		return productStoreOperateMysqlDAO.getInputNum(request);
+	}
+
+	@Override
+	public Integer getOutputNum(ProductStoreOperateListReq request) {
+		return productStoreOperateMysqlDAO.getOutputNum(request);
+	}
 }

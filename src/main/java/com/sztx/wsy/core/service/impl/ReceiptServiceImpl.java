@@ -51,12 +51,13 @@ public class ReceiptServiceImpl implements ReceiptService{
 			Integer productNum = receiptProductDO.getProductNum();//双数
 			Integer productPrice = receiptProductDO.getProductPrice();//单价
 			
-			Integer money = productNum * productPrice;//该商品总价
-			totalNum = totalNum + productNum;
-			totalMoney = totalMoney + money;
-			
 			receiptProductDO.setOrderNo(orderNo);
-			receiptProductDO.setTotalMoney(money);
+			totalNum = totalNum + productNum;
+			if(productPrice != null){
+				Integer money = productNum * productPrice;//该商品总价
+				totalMoney = totalMoney + money;
+				receiptProductDO.setTotalMoney(money);
+			}
 		}
 		
 		receiptDO.setTotalNum(totalNum);
@@ -107,9 +108,10 @@ public class ReceiptServiceImpl implements ReceiptService{
 	@Override
 	public void updateReceipt(ReceiptDO receiptDO) {
 		
+		receiptProductMysqlDAO.deleteByOrderNo(receiptDO.getOrderNo());//删除票据商品表数据
 		makeReceiptParam(receiptDO, receiptDO.getOrderNo());
-		receiptMysqlDAO.update(receiptDO);
-		receiptProductMysqlDAO.batchUpdate(receiptDO.getProducts());
+		receiptMysqlDAO.update(receiptDO);//更新票据表
+		receiptProductMysqlDAO.batchAdd(receiptDO.getProducts());//批量插入票据商品表
 	}
 
 	@Override

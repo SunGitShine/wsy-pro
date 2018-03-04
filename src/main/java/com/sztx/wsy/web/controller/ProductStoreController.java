@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.sztx.wsy.common.domain.PageQuery;
 import com.sztx.wsy.common.domain.Result;
+import com.sztx.wsy.common.domain.ResultCode;
 import com.sztx.wsy.core.service.ProductService;
 import com.sztx.wsy.core.service.ProductStoreService;
 import com.sztx.wsy.core.service.domain.request.ProductStoreOperateListReq;
@@ -74,7 +75,14 @@ public class ProductStoreController extends BaseController{
 		
 		Integer totalCount = productStoreService.totalCount(request);
 		List<ProductStoreOperateListRsp> productStoreOperateDOs = productStoreService.productOutputOrInputList(request, pageQuery);
-		return ParameterUtil.pageSuccessResult(totalCount, productStoreOperateDOs);
+		Integer inputNum = productStoreService.getInputNum(request);//入库数量
+		Integer outputNum = productStoreService.getOutputNum(request);//出库数量
+		
+		Result result = new Result(ResultCode.COMMON_SUCCESS, true);
+		result.setPage(totalCount, productStoreOperateDOs);
+		result.setProperty("inputNum", inputNum);
+		result.setProperty("outputNum", outputNum);
+		return result;
 	}
 	
 	@RequestMapping(value = "/updateStoreSet")

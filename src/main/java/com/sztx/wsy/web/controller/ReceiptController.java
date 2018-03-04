@@ -74,8 +74,10 @@ public class ReceiptController extends BaseController{
 		
 		Result result = new Result(ResultCode.COMMON_SUCCESS, true);
 		result.setPage(totalCount, receiptDOs);
-		result.setProperty("sumNum", sumMap.get("sumNum"));
-		result.setProperty("sumMoney", sumMap.get("sumMoney"));
+		if(sumMap != null){
+			result.setProperty("sumNum", sumMap.get("sumNum"));
+			result.setProperty("sumMoney", sumMap.get("sumMoney"));
+		}
 		return result;
 	}
 	

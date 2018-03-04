@@ -19,4 +19,8 @@ public interface ProductStoreService {
 	List<ProductStoreOperateListRsp> productOutputOrInputList(ProductStoreOperateListReq request, PageQuery pageQuery);
 	
 	void updateSotreSet(List<ProductStoreDO> productStoreDOs, Integer productId);
+	
+	Integer getInputNum(ProductStoreOperateListReq request);
+	
+	Integer getOutputNum(ProductStoreOperateListReq request);
 }

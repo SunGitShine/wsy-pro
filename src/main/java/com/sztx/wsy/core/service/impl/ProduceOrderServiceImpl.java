@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sztx.wsy.common.domain.BusinessException;
 import com.sztx.wsy.common.domain.PageQuery;
@@ -67,6 +68,7 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 	private static final Logger log = LoggerFactory.getLogger(ProduceOrderServiceImpl.class);
 
 	@Override
+	@Transactional
 	public void add(ProduceOrderVO produceOrderVO, Integer smsIsOpen, Integer isCreatDeliveryNote) {
 		
 		Integer orderNum = chackParamAndOrderNum(produceOrderVO);

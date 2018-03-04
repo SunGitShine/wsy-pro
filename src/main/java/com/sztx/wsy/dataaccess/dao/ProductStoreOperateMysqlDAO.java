@@ -19,4 +19,8 @@ public interface ProductStoreOperateMysqlDAO {
 	
 	List<ProductStoreOperateDO> findByPage(@Param("request") ProductStoreOperateListReq request,
 			@Param("pageQuery") PageQuery pageQuery);
+	
+	Integer getInputNum(@Param("request") ProductStoreOperateListReq request);
+	
+	Integer getOutputNum(@Param("request") ProductStoreOperateListReq request);
 }
