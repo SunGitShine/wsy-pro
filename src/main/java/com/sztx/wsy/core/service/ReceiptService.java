@@ -3,8 +3,6 @@ package com.sztx.wsy.core.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.sztx.wsy.common.domain.PageQuery;
 import com.sztx.wsy.core.service.domain.request.ReceiptPageReq;
 import com.sztx.wsy.dataaccess.domain.ReceiptDO;

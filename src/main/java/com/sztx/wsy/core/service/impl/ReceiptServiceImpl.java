@@ -88,11 +88,7 @@ public class ReceiptServiceImpl implements ReceiptService{
 	@Override
 	public void print(String orderNo) {
 		
-		ReceiptDO receiptDO = new ReceiptDO();
-		receiptDO.setOrderNo(orderNo);
-		receiptDO.setCreateReceiptTime(new Date());
-		
-		receiptMysqlDAO.update(receiptDO);
+		receiptMysqlDAO.print(orderNo);
 	}
 
 	@Override

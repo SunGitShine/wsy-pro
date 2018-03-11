@@ -91,4 +91,11 @@ public class ReceiptController extends BaseController{
 		return ParameterUtil.commonSuccessResult();
 	}
 	
+	@RequestMapping(value = "/sendMsg")
+	public Result sendMsg(){
+		
+		String orderNo = ParameterUtil.getString("orderNo");
+		return ParameterUtil.commonSuccessResult();
+	}
+	
 }

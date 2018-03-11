@@ -66,6 +66,12 @@
     delete from receipt
     where order_no = #{orderNo,jdbcType=VARCHAR}
   </delete>
+  
+  <update id="print" parameterType="java.lang.String">
+  	UPDATE receipt SET create_receipt_time=NOW() 
+  	WHERE create_receipt_time IS NULL 
+  	AND order_no=#{orderNo};
+  </update>
 
   <select id="totalCount" resultType="java.lang.Integer" parameterType="com.sztx.wsy.core.service.domain.request.ReceiptPageReq">
     select count(*) from receipt

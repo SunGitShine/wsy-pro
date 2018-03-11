@@ -262,10 +262,17 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 			receiptMysqlDAO.deleteByOrderNo(orderNo);//删除票据表
 			receiptProductMysqlDAO.deleteByOrderNo(orderNo);//删除票据商品表
 			add(produceOrderVO,null,isCreatDeliveryNote);
-		}else{//已进入生产流程，只更新订单表，订单产品和订单产品详情表不更新
+		}else{//已进入生产流程，只更新订单表、订单产品，订单产品详情表不更新
 			ProduceOrderDO updateProduceOrderDO = new ProduceOrderDO();
 			BeanUtils.copyProperties(produceOrderVO, updateProduceOrderDO);
 			produceOrderMysqlDAO.update(updateProduceOrderDO);
+			
+			ReceiptDO receiptDO = new ReceiptDO();
+			receiptDO.setOrderNo(orderNo);
+			receiptDO.setCustomerName(produceOrderVO.getCustomerName());
+			receiptDO.setCustomerPhone(produceOrderVO.getCustomerPhone());
+			receiptDO.setDeliveryAddress(produceOrderVO.getDeliveryAddress());
+			receiptMysqlDAO.update(receiptDO);
 		}
 	}
 	

@@ -25,4 +25,6 @@ public interface ReceiptMysqlDAO {
 			@Param("pageQuery")PageQuery pageQuery);
 	
 	Map<String, Integer> getSumMsg(@Param("receiptPageReq")ReceiptPageReq receiptPageReq);
+	
+	void print(@Param("orderNo")String orderNo);
 }

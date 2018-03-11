@@ -56,7 +56,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>/index.html</welcome-file>
+		<welcome-file>/dist/index.html</welcome-file>
 	</welcome-file-list>
 	
 	<!-- other -->
