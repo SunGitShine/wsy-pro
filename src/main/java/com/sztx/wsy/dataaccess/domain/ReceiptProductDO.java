@@ -11,6 +11,13 @@ public class ReceiptProductDO implements Serializable{
 
 	private static final long serialVersionUID = 6010391747795953820L;
 
+//	public ReceiptProductDO() {
+//		productName = "";
+//		productNum = null;
+//		productPrice = null;
+//		totalMoney = null;
+//	}
+	
 	/**
 	 * 票据产品id
 	 */
@@ -37,6 +44,11 @@ public class ReceiptProductDO implements Serializable{
 	 * 产品总价
 	 */
 	private Integer totalMoney;
+	
+	/**
+	 * 货号
+	 */
+	private String artNo;
 	
 	public Integer getId() {
 		return id;
@@ -73,5 +85,11 @@ public class ReceiptProductDO implements Serializable{
 	}
 	public void setTotalMoney(Integer totalMoney) {
 		this.totalMoney = totalMoney;
+	}
+	public String getArtNo() {
+		return artNo;
+	}
+	public void setArtNo(String artNo) {
+		this.artNo = artNo;
 	}
 }

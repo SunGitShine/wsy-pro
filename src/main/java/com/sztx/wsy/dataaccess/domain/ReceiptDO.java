@@ -12,6 +12,19 @@ import java.util.List;
 public class ReceiptDO implements Serializable{
 
 	private static final long serialVersionUID = -9000522416224914020L;
+	
+//	public ReceiptDO(){
+//		orderName = "";
+//		customerName = "";
+//		customerPhone = "";
+//		deliveryAddress = "";
+//		totalNum = null;
+//		totalMoney = null;
+//		balanceStatus = null;
+//		createReceiptTime = null;
+//		balanceTime = null;
+//		memo = "";
+//	}
 
 	/**
 	 * 票据id
@@ -81,6 +94,11 @@ public class ReceiptDO implements Serializable{
 	 * 查询结果的总金额
 	 */
 	private Integer sumMoney;
+	
+	/**
+	 * 备注
+	 */
+	private String memo;
 	
 	public Integer getId() {
 		return id;
@@ -183,5 +201,11 @@ public class ReceiptDO implements Serializable{
 	}
 	public void setSumMoney(Integer sumMoney) {
 		this.sumMoney = sumMoney;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 }

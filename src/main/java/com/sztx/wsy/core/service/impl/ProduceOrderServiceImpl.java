@@ -102,6 +102,7 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 			receiptDO.setDeliveryAddress(produceOrderVO.getDeliveryAddress());
 			receiptDO.setTotalNum(orderNum);
 			receiptDO.setTotalMoney(Integer.parseInt(orderAmount.toString()));
+			receiptDO.setCreateUser(produceOrderVO.getCreateUser());
 			receiptDO.setBalanceStatus(0);
 			
 			receiptMysqlDAO.add(receiptDO);//票据表插入数据
@@ -113,7 +114,7 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 			List<AccountDO> accountDOs = accountMysqlDAO.findByType(2);
 			String tplValue = "#orderNo#=" + orderNo + "&#orderName#=" + produceOrderVO.getOrderName();
 			for(AccountDO accountDO : accountDOs){
-				MsgUtil.sendSMS("32120", tplValue, accountDO.getMobile());
+				MsgUtil.sendSMS("66752", tplValue, accountDO.getMobile());
 			}
 		}
 	}
@@ -296,37 +297,37 @@ public class ProduceOrderServiceImpl implements ProduceOrderService{
 		
 		ProduceOrderDO produceOrder = produceOrderMysqlDAO.findByOrderNo(produceOrderDO.getOrderNo());
 		
-		if(smsIsOpen != null && smsIsOpen == 1){
-			if(produceOrderDO.getVampStatus() != null && produceOrderDO.getVampStatus() == 2){
-				//发送短信通知下案管理员
-				List<AccountDO> accountDOs = accountMysqlDAO.findByType(3);
-				try {
-					String tplValue = "#orderNo#=" + produceOrder.getOrderNo() + "&#orderName#=" + produceOrder.getOrderName();
-					for(AccountDO accountDO : accountDOs){
-						MsgUtil.sendSMS("32120", tplValue, accountDO.getMobile());
-					}
-				} catch (Exception e) {
-					throw new BusinessException("短信发送异常");
-				}
-			}
-			
-			if(produceOrderDO.getQcStatus() != null && produceOrderDO.getQcStatus() == 1){
-				
-				//发送短信通知管理员
-				float useTime = useTime(produceOrder.getCreateTime());
-				List<AccountDO> accountDOs = accountMysqlDAO.findByType(1);
-				try {
-					String tplValue = "#orderNo#=" + produceOrder.getOrderNo() + "&#orderName#=" 
-							+ produceOrder.getOrderName() + "&#useTime#=" + useTime;
-					for(AccountDO accountDO : accountDOs){
-						MsgUtil.sendSMS("32122", tplValue, accountDO.getMobile());
-					}
-				} catch (Exception e) {
-					throw new BusinessException("短信发送异常");
-				}
-				
-			}
-		}
+//		if(smsIsOpen != null && smsIsOpen == 1){
+//			if(produceOrderDO.getVampStatus() != null && produceOrderDO.getVampStatus() == 2){
+//				//发送短信通知下案管理员
+//				List<AccountDO> accountDOs = accountMysqlDAO.findByType(3);
+//				try {
+//					String tplValue = "#orderNo#=" + produceOrder.getOrderNo() + "&#orderName#=" + produceOrder.getOrderName();
+//					for(AccountDO accountDO : accountDOs){
+//						MsgUtil.sendSMS("66752", tplValue, accountDO.getMobile());
+//					}
+//				} catch (Exception e) {
+//					throw new BusinessException("短信发送异常");
+//				}
+//			}
+//			
+//			if(produceOrderDO.getQcStatus() != null && produceOrderDO.getQcStatus() == 1){
+//				
+//				//发送短信通知管理员
+//				float useTime = useTime(produceOrder.getCreateTime());
+//				List<AccountDO> accountDOs = accountMysqlDAO.findByType(1);
+//				try {
+//					String tplValue = "#orderNo#=" + produceOrder.getOrderNo() + "&#orderName#=" 
+//							+ produceOrder.getOrderName() + "&#useTime#=" + useTime;
+//					for(AccountDO accountDO : accountDOs){
+//						MsgUtil.sendSMS("66751", tplValue, accountDO.getMobile());
+//					}
+//				} catch (Exception e) {
+//					throw new BusinessException("短信发送异常");
+//				}
+//				
+//			}
+//		}
 	}
 	
 	@Override

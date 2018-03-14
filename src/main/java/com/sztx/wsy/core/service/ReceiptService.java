@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.sztx.wsy.common.domain.PageQuery;
 import com.sztx.wsy.core.service.domain.request.ReceiptPageReq;
+import com.sztx.wsy.dataaccess.domain.ProduceOrderDO;
 import com.sztx.wsy.dataaccess.domain.ReceiptDO;
 
 public interface ReceiptService {
@@ -24,4 +25,8 @@ public interface ReceiptService {
 	List<ReceiptDO> findByPage(ReceiptPageReq receiptPageReq, PageQuery pageQuery);
 	
 	Map<String, Integer> getSumMsg(ReceiptPageReq receiptPageReq);
+	
+	ProduceOrderDO findByOrderNo(String orderNo);
+	
+	void sendMsg(String orderNo);
 }

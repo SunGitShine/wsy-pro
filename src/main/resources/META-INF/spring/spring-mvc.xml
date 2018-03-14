@@ -205,11 +205,11 @@
 	</bean>
 	
 	<mvc:interceptors>  
-        <!-- <mvc:interceptor>  
+        <mvc:interceptor>  
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/mobile/**"/>
             <bean class="com.sztx.wsy.interceptor.LoginInterceptor"/>  
-        </mvc:interceptor> --> 
+        </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.sztx.wsy.interceptor.LogInterceptor">

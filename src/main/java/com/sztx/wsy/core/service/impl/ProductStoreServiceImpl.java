@@ -90,14 +90,14 @@ public class ProductStoreServiceImpl implements ProductStoreService{
 		productMysqlDAO.update(productDO);//更新产品表
 		
 		//超级管理员出库短信通知下案管理员
-		if(request.getType() == 1 && LoginUtil.currentUser().getType() == 1){
-			Integer operateNum = productStoreOperateDO.getStoreOperateNum();
-			List<AccountDO> accountDOs = accountMysqlDAO.findByType(1);
-			String tplValue = "#productName#=" + request.getProductName() + "&#productNum#=" + operateNum;
-			for(AccountDO accountDO : accountDOs){
-				MsgUtil.sendSMS("32124", tplValue, accountDO.getMobile());
-			}
-		}
+//		if(request.getType() == 1 && LoginUtil.currentUser().getType() == 1){
+//			Integer operateNum = productStoreOperateDO.getStoreOperateNum();
+//			List<AccountDO> accountDOs = accountMysqlDAO.findByType(1);
+//			String tplValue = "#productName#=" + request.getProductName() + "&#productNum#=" + operateNum;
+//			for(AccountDO accountDO : accountDOs){
+//				MsgUtil.sendSMS("66750", tplValue, accountDO.getMobile());
+//			}
+//		}
  	}
 	
 	@Override

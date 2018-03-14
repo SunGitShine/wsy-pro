@@ -17,21 +17,22 @@
     <result column="balance_time" jdbcType="TIMESTAMP" property="balanceTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
   </resultMap>
 
   <sql id="column_List">
     id, order_no, order_name, customer_name, customer_phone, delivery_address, total_num, total_money, balance_status, 
-    create_time, create_receipt_time, balance_time, create_user, update_user
+    create_time, create_receipt_time, balance_time, create_user, update_user, memo
   </sql>
   
   <insert id="add" parameterType="com.sztx.wsy.dataaccess.domain.ReceiptDO">
     insert into receipt (order_no, order_name, customer_name, customer_phone, 
     delivery_address, total_num, total_money, balance_status, 
-    create_time, create_user, update_user)
+    create_time, create_user, update_user, memo)
     values (#{orderNo,jdbcType=VARCHAR}, #{orderName,jdbcType=VARCHAR}, 
       #{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{deliveryAddress,jdbcType=VARCHAR}, 
       #{totalNum,jdbcType=INTEGER}, #{totalMoney,jdbcType=INTEGER}, #{balanceStatus,jdbcType=INTEGER}, 
-      now(), #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR})
+      now(), #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, memo)
       <selectKey resultType="java.lang.Integer" order="AFTER"
 			keyProperty="id">
 			SELECT LAST_INSERT_ID() AS id
@@ -50,6 +51,7 @@
   		<if test="balanceStatus != null">balance_status = #{balanceStatus,jdbcType=INTEGER},</if>
   		<if test="createReceiptTime != null and createReceiptTime != ''">create_receipt_time = #{createReceiptTime,jdbcType=TIMESTAMP},</if>
   		<if test="balanceTime != null and balanceTime != ''">balance_time = #{balanceTime,jdbcType=TIMESTAMP},</if>
+  		<if test="memo != null and memo != ''">memo = #{memo,jdbcType=VARCHAR},</if>
   		update_user = #{updateUser,jdbcType=VARCHAR},
   	</set>
   	where order_no = #{orderNo,jdbcType=VARCHAR}

@@ -95,7 +95,22 @@ public class ReceiptController extends BaseController{
 	public Result sendMsg(){
 		
 		String orderNo = ParameterUtil.getString("orderNo");
+		receiptService.sendMsg(orderNo);
 		return ParameterUtil.commonSuccessResult();
+	}
+	
+	@RequestMapping(value = "/isExistOrder")
+	public Result isExistOrder() {
+		
+		String orderNo = ParameterUtil.getString("orderNo");
+		
+		Result result = new Result(ResultCode.COMMON_SUCCESS, true);
+		if(receiptService.findByOrderNo(orderNo) == null) {
+			result.setProperty("isExistOrder", "0");
+		}else {
+			result.setProperty("isExistOrder", "1");
+		}
+		return result;
 	}
 	
 }

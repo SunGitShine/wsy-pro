@@ -10,10 +10,11 @@
 		<result column="product_num" jdbcType="INTEGER" property="productNum" />
 		<result column="product_price" jdbcType="INTEGER" property="productPrice" />
 		<result column="total_money" jdbcType="INTEGER" property="totalMoney" />
+		<result column="art_no" jdbcType="VARCHAR" property="artNo" />
 	</resultMap>
 
 	<sql id="column_List">
-		id, order_no, product_name, product_num, product_price, total_money
+		id, order_no, product_name, product_num, product_price, total_money, art_no
 	</sql>
 
 	<select id="findByOrderNo" parameterType="java.lang.String"
@@ -31,10 +32,10 @@
 
 	<insert id="batchAdd" parameterType="com.sztx.wsy.dataaccess.domain.ProductStoreOperateDetailDO">
 		insert into receipt_product (order_no, product_name, product_num,
-		product_price, total_money)
+		product_price, total_money, art_no)
 		values
 		<foreach collection="receiptProducts" item="item" index="index" separator=",">
-			(#{item.orderNo},#{item.productName},#{item.productNum},#{item.productPrice},#{item.totalMoney})
+			(#{item.orderNo},#{item.productName},#{item.productNum},#{item.productPrice},#{item.totalMoney},#{item.artNo})
 		</foreach>
 	</insert>
 
@@ -66,6 +67,13 @@
 				<foreach collection="receiptProducts" item="item" index="index">
 					<if test="item.totalMoney !=null">
 						when id=#{item.id} then #{item.totalMoney}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="art_no =case" suffix="end,">
+				<foreach collection="receiptProducts" item="item" index="index">
+					<if test="item.totalMoney !=null">
+						when id=#{item.id} then #{item.artNo}
 					</if>
 				</foreach>
 			</trim>

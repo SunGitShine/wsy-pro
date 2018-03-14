@@ -7,16 +7,7 @@
 <configuration>
 	<settings>
 		<setting name="lazyLoadingEnabled" value="false" />
-		<setting name="cacheEnabled" value="false" />
+		<setting name="cacheEnabled" value="true" />
+		<setting name="callSettersOnNulls" value="true"/> <!-- 返回空字段 -->
 	</settings>
-	
-	 <typeAliases>
-	</typeAliases>
-	
-
-	<!--<plugins>
-		<plugin interceptor="com.pay1pay.framework.core.ibatis.PageHelper">
-			<property name="dialect" value="mysql" />
-		</plugin>
-	</plugins> -->
 </configuration>
